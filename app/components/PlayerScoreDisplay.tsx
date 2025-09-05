@@ -15,7 +15,7 @@ export const PlayerScoreDisplay = ({ data }: { data: any }) => {
       <CardContent className="flex flex-row items-center justify-around">
         <div className="flex flex-col text-center">
           <img
-            src={Object.entries(data.playerSkins)[0][1]}
+            src={Object.entries(data.playerSkins)[0][1] as string}
             className="w-20 h-20"
           />
           <span className="text-4xl font-extrabold text-gray-800 dark:text-white py-2 rounded-lg">
@@ -34,7 +34,7 @@ export const PlayerScoreDisplay = ({ data }: { data: any }) => {
 
         <div className="flex flex-col text-center">
           <img
-            src={Object.entries(data.playerSkins)[1][1]}
+            src={Object.entries(data.playerSkins)[1][1] as string}
             className="w-20 h-20 scale-x-[-1]"
           />
           <span className="text-4xl font-extrabold text-gray-800 dark:text-white py-2 rounded-lg">

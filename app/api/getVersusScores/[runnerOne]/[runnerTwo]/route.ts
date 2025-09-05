@@ -3,14 +3,13 @@ import { getVersusScores } from "@/app/utils/getVersusScores";
 import { NextRequest } from "next/server";
 
 
-interface getVersusMatchesInterface {
-  params: {
+
+export async function GET(req: NextRequest, { params }: {
+  params: Promise<{
     runnerOne: string
     runnerTwo: string
-  }
-}
-
-export async function GET(req: NextRequest, { params }: getVersusMatchesInterface) {
+  }>
+}) {
 
   const { runnerOne, runnerTwo } = await params;
 

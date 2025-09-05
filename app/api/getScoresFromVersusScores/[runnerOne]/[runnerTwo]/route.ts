@@ -5,14 +5,12 @@ import { getVersusScores } from "@/app/utils/getVersusScores";
 import { NextRequest } from "next/server";
 
 
-interface getScoresInterface {
-  params: {
+export async function GET(req: NextRequest, { params }: {
+  params: Promise<{
     runnerOne: string
     runnerTwo: string
-  }
-}
-
-export async function GET(req: NextRequest, { params }: getScoresInterface) {
+  }>
+}) {
   const { runnerOne, runnerTwo } = await params;
 
   const versusScores = await getVersusScores(runnerOne, runnerTwo);

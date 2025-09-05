@@ -6,20 +6,18 @@ import { getVersusScores } from "@/app/utils/getVersusScores";
 import { getPlayerSkins } from "@/app/utils/playerSkins";
 import { NextRequest } from "next/server";
 
-interface getScoresInterface {
-  params: {
-    runnerOne: string;
-    runnerTwo: string;
-  }
-}
-
 interface leaderBoardData {
   season: {
     number: number
   }
 }
 
-export async function GET(req: NextRequest, { params }: getScoresInterface) {
+export async function GET(req: NextRequest, { params }: {
+  params: Promise<{
+    runnerOne: string;
+    runnerTwo: string;
+  }>
+}) {
   const { runnerOne, runnerTwo } = await params;
 
   const eloLeaderboard = await fetch(`https://mcsrranked.com/api/leaderboard`)
