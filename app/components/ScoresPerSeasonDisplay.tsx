@@ -17,7 +17,7 @@ interface ScoresPerSeasonDisplayProps {
 
 export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) => {
   return (
-    <Card className="border border-gray-300 rounded-xl shadow-lg p-8 bg-white">
+    <Card className="border rounded-xl shadow-lg p-8">
       <CardContent className="flex flex-col items-center">
         <span className="text-4xl font-extrabold py-2 rounded-lg">
           Scores Per Season
@@ -28,19 +28,19 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
           } else {
             return (
               //TODO: make a button to collapse/uncollapse all
-              <Collapsible key={`seasonScore-${index}`} className="mb-4">
+              <Collapsible key={`seasonScore-${index}`} className="mb-4 flex flex-grow flex-col">
                 <div className="flex flex-col">
                   <div>
-                    <span className="text-4xl font-extrabold text-gray-800 py-2 rounded-lg mr-4">
+                    <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg mr-4">
                       {`S${data.allTimeMatches.length - index}: `}
                     </span>
-                    <span className="text-4xl font-extrabold text-gray-800 py-2 rounded-lg">
+                    <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
                       {seasonScore[Object.entries(data.playerSkins)[0][0]]}
                     </span>
-                    <span className="text-4xl font-extrabold text-gray-800 py-2 rounded-lg">
+                    <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
                       {" - "}
                     </span>
-                    <span className="text-4xl font-extrabold text-gray-800 py-2 rounded-lg">
+                    <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
                       {seasonScore[Object.entries(data.playerSkins)[1][0]]}
                     </span>
                     <CollapsibleTrigger asChild>
@@ -52,7 +52,7 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
                 </div>
                 <CollapsibleContent className="flex flex-col space-y-2">
                   <div className="overflow-x-auto">
-                    <div className="grid grid-cols-3 gap-4 border-b pb-2 mb-2 text-lg font-bold text-gray-700">
+                    <div className="grid grid-cols-3 gap-4 border-b pb-2 mb-2 text-lg font-bold text-gray-700 dark:text-gray-500">
                       <span>Winner</span>
                       <span>Elo Change</span>
                       <span>Time</span>
@@ -63,10 +63,10 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
                       return (
                         <div
                           key={match.id}
-                          className="grid grid-cols-3 gap-4 py-2 border-b text-center text-gray-800"
+                          className="grid grid-cols-3 gap-4 py-2 border-b text-center text-gray-800 dark:text-gray-400"
                         >
                           <span className="font-semibold">{winner}</span>
-                          <span className={`${eloChange && eloChange > 0 ? "text-green-600" : "text-red-600"}`}>
+                          <span className={`${eloChange && eloChange > 0 ? "text-green-600 dark:text-green-400" : "text-red-600"}`}>
                             {eloChange > 0 ? `+${eloChange}` : eloChange}
                           </span>
                           <span>{formatTime(match.result.time)}</span>

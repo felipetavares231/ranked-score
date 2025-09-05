@@ -18,11 +18,11 @@ export const PlayerInput = ({ setRunner, setRunner2, onClick, isLoading }: Playe
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    let interval: NodeJS.Timer
+    let interval: number | undefined
 
     if (isLoading) {
       setProgress(0)
-      interval = setInterval(() => {
+      interval = window.setInterval(() => {
         setProgress((prev) => {
           const next = prev + Math.random() * 5
           return next > 95 ? 95 : next
@@ -31,12 +31,17 @@ export const PlayerInput = ({ setRunner, setRunner2, onClick, isLoading }: Playe
     } else {
       setProgress(100)
     }
-    return () => clearInterval(interval)
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
   }, [isLoading])
   //TODO: move all of this progress bar logic into a separate component
 
   return (
-    <Card className="border border-gray-300 rounded-xl shadow-lg p-8 bg-white">
+    <Card className="border rounded-xl shadow-lg p-8">
       <CardContent className="flex flex-col items-center space-y-6">
         <div className="flex flex-row items-center space-x-4 text-center">
           <span>Compare</span>
