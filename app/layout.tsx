@@ -32,7 +32,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppClientProviders>
-          <ThemeToggle />
+          <div className="mt-2 ml-2">
+            <ThemeToggle />
+          </div>
           {children}
         </AppClientProviders>
       </body>

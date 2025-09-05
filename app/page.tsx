@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex justify-center mt-12">
+    <div className="h-screen flex justify-center flex-wrap">
       <div className="flex flex-col mr-16">
         <div className="mb-4">
           <PlayerInput setRunner={setRunner} setRunner2={setRunner2} onClick={handleCompare} isLoading={isLoading} />

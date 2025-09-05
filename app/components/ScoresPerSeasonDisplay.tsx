@@ -17,7 +17,7 @@ interface ScoresPerSeasonDisplayProps {
 
 export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) => {
   return (
-    <Card className="border rounded-xl shadow-lg p-8">
+    <Card className="border rounded-xl shadow-lg p-8 mb-8">
       <CardContent className="flex flex-col items-center">
         <span className="text-4xl font-extrabold py-2 rounded-lg">
           Scores Per Season
@@ -61,9 +61,10 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
                       const winner = match.players.find((element: any) => element.uuid === match.result.uuid)?.nickname
                       const eloChange = match.changes.find((element: any) => element.uuid === match.result.uuid)?.change
                       return (
+                        //TODO: go to ranked stats page to show the match stats
                         <div
                           key={match.id}
-                          className="grid grid-cols-3 gap-4 py-2 border-b text-center text-gray-800 dark:text-gray-400"
+                          className="grid grid-cols-3 gap-4 py-2 border-b text-center text-gray-800 dark:text-gray-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                         >
                           <span className="font-semibold">{winner}</span>
                           <span className={`${eloChange && eloChange > 0 ? "text-green-600 dark:text-green-400" : "text-red-600"}`}>
