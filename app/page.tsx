@@ -23,7 +23,7 @@ export default function Home() {
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["scores", runner, runner2],
     queryFn: async () => {
-      const res = await fetch(`/api/getScores/${runner}/${runner2}`)
+      const res = await fetch(`/api/getAllTimeStats/${runner}/${runner2}`)
       if (!res.ok) {
         throw new Error("failed to fetch")
       }
