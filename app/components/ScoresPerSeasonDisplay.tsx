@@ -16,13 +16,14 @@ interface ScoresPerSeasonDisplayProps {
 }
 
 export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) => {
+
   return (
     <Card className="border rounded-xl shadow-lg p-8 mb-8">
       <CardContent className="flex flex-col items-center">
         <span className="text-4xl font-extrabold py-2 rounded-lg">
           Scores Per Season
         </span>
-        {[...data.allTimeMatches].reverse().map((seasonScore, index, arrRef) => {
+        {[...data.scoresPerSeason].reverse().map((seasonScore, index, arrRef) => {
           if (seasonScore.total == 0) {
             return null
           } else {
@@ -32,7 +33,7 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
                 <div className="flex flex-col">
                   <div>
                     <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg mr-4">
-                      {`S${data.allTimeMatches.length - index}: `}
+                      {`S${data.scoresPerSeason.length - index}: `}
                     </span>
                     <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
                       {seasonScore[Object.entries(data.playerSkins)[0][0]]}

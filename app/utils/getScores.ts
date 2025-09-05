@@ -1,16 +1,24 @@
-export const getScores = (runnerOne: any, runnerTwo: any, scores: any): any => {
+export const getScoresFromVersusScores = (versusScores: any): any => {
+  let scores: any = {}
 
-  if (scores.hasOwnProperty(runnerOne[0])) {
-    scores[runnerOne[0]] += runnerOne[1]
-  } else {
-    scores[runnerOne[0]] = runnerOne[1]
-  }
+  versusScores.map((season: any) => {
+    const ranked = season.data.results.ranked
 
-  if (scores.hasOwnProperty(runnerTwo[0])) {
-    scores[runnerTwo[0]] += runnerTwo[1]
-  } else {
-    scores[runnerTwo[0]] = runnerTwo[1]
-  }
+    const runnerOne = Object.entries(ranked)[1]
+    const runnerTwo = Object.entries(ranked)[2]
+
+    if (scores.hasOwnProperty(runnerOne[0])) {
+      scores[runnerOne[0]] += runnerOne[1]
+    } else {
+      scores[runnerOne[0]] = runnerOne[1]
+    }
+
+    if (scores.hasOwnProperty(runnerTwo[0])) {
+      scores[runnerTwo[0]] += runnerTwo[1]
+    } else {
+      scores[runnerTwo[0]] = runnerTwo[1]
+    }
+  })
 
   return scores
 }

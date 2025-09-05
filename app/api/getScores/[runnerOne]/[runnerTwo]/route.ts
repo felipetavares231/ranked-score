@@ -1,5 +1,8 @@
 import { getAllTimeNumberOfMatches } from "@/app/utils/getAllTimeNumberOfMatches";
-import { getScores } from "@/app/utils/getScores";
+import { getScoresFromVersusScores } from "@/app/utils/getScores";
+import { getScoresPerSeason } from "@/app/utils/getScoresPerSeason";
+import { getVersusMatches } from "@/app/utils/getVersusMatches";
+import { getVersusScores } from "@/app/utils/getVersusScores";
 import { getPlayerSkins } from "@/app/utils/playerSkins";
 import { NextRequest } from "next/server";
 
@@ -27,35 +30,13 @@ export async function GET(req: NextRequest, { params }: getScoresInterface) {
     throw new Error("season number not found")
   }
 
-  let versusScores = []
-  let versusMatches = []
+  const versusMatches = await getVersusMatches(runnerOne, runnerTwo);
+  const versusScores = await getVersusScores(runnerOne, runnerTwo);
 
-  for (let i = 1; i <= 9; i++) {
-    let res = await fetch(`https://mcsrranked.com/api/users/${runnerOne}/versus/${runnerTwo}?season=${i}&type=2`)
-    versusScores.push(await res.json());
-
-    res = await fetch(`https://mcsrranked.com/api/users/${runnerOne}/versus/${runnerTwo}/matches?season=${i}&type=2`)
-    versusMatches.push(await res.json())
-  }
-
-  const allTimeMatches: any = []
-  let allTimeNumberOfMatches = 0;
-
-  let scores = {}
-  versusScores.map((season) => {
-    const ranked = season.data.results.ranked
-
-    const run1 = Object.entries(ranked)[1]
-    const run2 = Object.entries(ranked)[2]
-
-    getScores(run1, run2, scores)
-
-    allTimeMatches.push(ranked)
-    const num = ranked.total
-    allTimeNumberOfMatches += num
-  })
-
+  const scores = getScoresFromVersusScores(versusScores)
   const playerSkins = getPlayerSkins(scores)
+  const allTimeNumberOfMatches = getAllTimeNumberOfMatches(versusScores)
+  const scoresPerSeason = getScoresPerSeason(versusScores)
 
   //TODO: maybe filter allTimeMatches to exclude the ones where total == 0, instead of doing that on the client
   //TODO: maybe reverse the allTimeMatches so that it's from latest season to oldest
@@ -63,7 +44,7 @@ export async function GET(req: NextRequest, { params }: getScoresInterface) {
     playerSkins,
     scores,
     allTimeNumberOfMatches,
-    allTimeMatches,
+    scoresPerSeason,
     versusMatches
   })
 }
