@@ -23,6 +23,7 @@ const OverlayPage = () => {
       }
       return res.json()
     },
+    refetchInterval: 1000 * 60
   });
 
   const { data: rankedScoresResponse, refetch: getRankedScores } = useQuery({
@@ -72,6 +73,7 @@ const OverlayPage = () => {
   return (
     //TODO: make the entire overlay transparent, class = `${!overlay ? 'bg-card' : ''}`
     //TODO: maybe add some description like "All Time Score Against Opponent on the bottom of the card"
+    //TODO: show somewhere on the main page that you can make the overlay
     <div className="flex flex-1">
       {dataToShow && (
         <div className="flex flex-1">
