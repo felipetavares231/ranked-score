@@ -41,7 +41,7 @@ const OverlayPage = () => {
     if (liveRankedResponse) {
       let currentMatch = liveRankedResponse.data.liveMatches.find((match: any) => match.players[0]?.nickname == runner || match.players[1]?.nickname == runner)
       let playerUuid = currentMatch?.players.find((player: any) => player["nickname"] == runner).uuid
-      let opponentUuid = Object.entries(currentMatch.data ?? {}).find((player) => player[0] !== playerUuid)?.[0]
+      let opponentUuid = Object.entries(currentMatch?.data ?? {}).find((player) => player[0] !== playerUuid)?.[0]
 
       setRunnerUuid(playerUuid)
       if (opponentUuid) {
@@ -70,10 +70,15 @@ const OverlayPage = () => {
   }, [rankedScoresResponse])
 
   return (
-    <div >
+    //TODO: make the entire overlay transparent, class = `${!overlay ? 'bg-card' : ''}`
+    //TODO: maybe add some description like "All Time Score Against Opponent on the bottom of the card"
+    <div className="flex flex-1">
       {dataToShow && (
-        <PlayerScoreDisplay data={dataToShow} />
+        <div className="flex flex-1">
+          <PlayerScoreDisplay data={dataToShow} />
+        </div>
       )}
+      <div className="flex flex-1"></div>
     </div>
   );
 };

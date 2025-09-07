@@ -15,6 +15,7 @@ import { formatTime } from "./utils/formatTime";
 import { winrate } from "./utils/getWinrate";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { ScoresPerSeasonDisplay } from "./components/ScoresPerSeasonDisplay";
+import { ThemeToggle } from "./components/ThemeToggle";
 
 export default function Home() {
   const [runner, setRunner] = useState("");
@@ -37,21 +38,26 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex justify-center flex-wrap">
-      <div className="flex flex-col mr-16">
-        <div className="mb-4">
-          <PlayerInput setRunner={setRunner} setRunner2={setRunner2} onClick={handleCompare} isLoading={isLoading} />
-        </div>
-        {data?.playerSkins && (
-          <div>
-            <PlayerScoreDisplay data={data} />
-          </div>
-        )}
+    <div>
+      <div className="mt-2 ml-2">
+        <ThemeToggle />
       </div>
-      {data && data.scoresPerSeason && (
-        <ScoresPerSeasonDisplay data={data} />
-      )
-      }
+      <div className="h-screen flex justify-center flex-wrap">
+        <div className="flex flex-col mr-16">
+          <div className="mb-4">
+            <PlayerInput setRunner={setRunner} setRunner2={setRunner2} onClick={handleCompare} isLoading={isLoading} />
+          </div>
+          {data?.playerSkins && (
+            <div>
+              <PlayerScoreDisplay data={data} />
+            </div>
+          )}
+        </div>
+        {data && data.scoresPerSeason && (
+          <ScoresPerSeasonDisplay data={data} />
+        )
+        }
+      </div>
     </div>
   );
 }
