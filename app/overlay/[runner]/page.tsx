@@ -77,7 +77,7 @@ const OverlayPage = () => {
     <div className="flex flex-1">
       {dataToShow && (
         <div className="flex flex-1">
-          <PlayerScoreDisplay data={dataToShow} />
+          <PlayerScoreDisplay overlay data={dataToShow} />
         </div>
       )}
       <div className="flex flex-1"></div>
