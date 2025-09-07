@@ -8,10 +8,10 @@ import { useEffect, useState } from "react";
 import { winrate } from "../utils/getWinrate";
 import { useTheme } from "next-themes";
 
-export const PlayerScoreDisplay = ({ data }: { data: any }) => {
+export const PlayerScoreDisplay = ({ data, overlay = false }: { data: any, overlay?: boolean }) => {
 
   return (
-    <Card className="border rounded-xl shadow-lg p-8">
+    <Card className={`rounded-xl shadow-lg p-8 ${!overlay ? "border" : "bg-transparent border-none"}`}>
       <CardContent className="flex flex-row items-center justify-around">
         <div className="flex flex-col text-center">
           <img
