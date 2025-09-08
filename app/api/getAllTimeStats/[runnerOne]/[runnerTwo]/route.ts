@@ -1,4 +1,6 @@
+import { generateReferences } from "@/app/utils/generateReferences";
 import { getAllTimeNumberOfMatches } from "@/app/utils/getAllTimeNumberOfMatches";
+import { getMinecraftId } from "@/app/utils/getMinecraftId";
 import { getScoresFromVersusScores } from "@/app/utils/getScores";
 import { getScoresPerSeason } from "@/app/utils/getScoresPerSeason";
 import { getVersusMatches } from "@/app/utils/getVersusMatches";
@@ -20,6 +22,8 @@ export async function GET(req: NextRequest, { params }: {
 }) {
   const { runnerOne, runnerTwo } = await params;
 
+  const references = await generateReferences(runnerOne, runnerTwo);
+
   const eloLeaderboard = await fetch(`https://mcsrranked.com/api/leaderboard`)
   const data: leaderBoardData = await eloLeaderboard.json();
 
@@ -39,6 +43,7 @@ export async function GET(req: NextRequest, { params }: {
   //TODO: maybe filter allTimeMatches to exclude the ones where total == 0, instead of doing that on the client
   //TODO: maybe reverse the allTimeMatches so that it's from latest season to oldest
   return Response.json({
+    references,
     playerSkins,
     scores,
     allTimeNumberOfMatches,

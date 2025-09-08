@@ -1,3 +1,4 @@
+import { generateReferences } from "@/app/utils/generateReferences";
 import { getAllTimeNumberOfMatches } from "@/app/utils/getAllTimeNumberOfMatches";
 import { getVersusMatches } from "@/app/utils/getVersusMatches";
 import { getVersusScores } from "@/app/utils/getVersusScores";
@@ -12,10 +13,13 @@ export async function GET(req: NextRequest, { params }: {
 
   const { runnerOne, runnerTwo } = await params;
 
+  const references = await generateReferences(runnerOne, runnerTwo);
+
   const versusScores = await getVersusScores(runnerOne, runnerTwo);
   const allTimeNumberOfMatches = getAllTimeNumberOfMatches(versusScores)
 
   return Response.json({
+    references,
     allTimeNumberOfMatches
   })
 }

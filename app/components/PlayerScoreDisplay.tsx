@@ -8,21 +8,31 @@ import { useEffect, useState } from "react";
 import { winrate } from "../utils/getWinrate";
 import { useTheme } from "next-themes";
 
-export const PlayerScoreDisplay = ({ data, overlay = false }: { data: any, overlay?: boolean }) => {
+interface PlayerScoreDisplayProps {
+  data: any;
+  overlay?: boolean;
+  runnerOne: string;
+  runnerTwo: string;
+}
+
+export const PlayerScoreDisplay = ({ data, overlay = false, runnerOne, runnerTwo }: PlayerScoreDisplayProps) => {
+
+  const runnerUuid = data.references[runnerOne];
+  const opponentUuid = data.references[runnerTwo];
 
   return (
     <Card className={`rounded-xl shadow-lg p-8 ${!overlay ? "border" : "bg-transparent border-none"}`}>
       <CardContent className="flex flex-row items-center justify-around">
         <div className="flex flex-col text-center">
           <img
-            src={Object.entries(data.playerSkins)[0][1] as string}
+            src={data.playerSkins[runnerUuid] as string}
             className="w-20 h-20"
           />
           <span className="text-4xl font-extrabold text-gray-800 dark:text-white py-2 rounded-lg">
-            {data.scores[Object.entries(data.playerSkins)[0][0]]}
+            {data.scores[runnerUuid]}
           </span>
           <span className="text-1xl font-extrabold text-gray-500 dark:text-gray-300 py-2 rounded-lg">
-            {winrate(data.scores[Object.entries(data.playerSkins)[0][0]], data.scores[Object.entries(data.playerSkins)[1][0]])}
+            {winrate(data.scores[runnerUuid], data.scores[opponentUuid])}
           </span>
         </div>
 
@@ -34,14 +44,14 @@ export const PlayerScoreDisplay = ({ data, overlay = false }: { data: any, overl
 
         <div className="flex flex-col text-center">
           <img
-            src={Object.entries(data.playerSkins)[1][1] as string}
+            src={data.playerSkins[opponentUuid] as string}
             className="w-20 h-20 scale-x-[-1]"
           />
           <span className="text-4xl font-extrabold text-gray-800 dark:text-white py-2 rounded-lg">
-            {data.scores[Object.entries(data.playerSkins)[1][0]]}
+            {data.scores[opponentUuid]}
           </span>
           <span className="text-1xl font-extrabold text-gray-500 dark:text-gray-300 py-2 rounded-lg">
-            {winrate(data.scores[Object.entries(data.playerSkins)[1][0]], data.scores[Object.entries(data.playerSkins)[0][0]])}
+            {winrate(data.scores[opponentUuid], data.scores[runnerUuid])}
           </span>
         </div>
       </CardContent>

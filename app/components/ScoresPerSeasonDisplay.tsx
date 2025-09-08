@@ -14,10 +14,12 @@ import Link from "next/link";
 import { SeasonScore } from "./SeasonScore";
 
 interface ScoresPerSeasonDisplayProps {
-  data: any
+  data: any;
+  runnerOne: string;
+  runnerTwo: string;
 }
 
-export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) => {
+export const ScoresPerSeasonDisplay = ({ data, runnerOne, runnerTwo }: ScoresPerSeasonDisplayProps) => {
   const numSeasons = data.scoresPerSeason.length;
 
   const [openStates, setOpenStates] = useState<boolean[]>(Array(numSeasons).fill(false));
@@ -34,6 +36,9 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
       return newStates;
     });
   };
+
+  const runnerUuid = data.references[runnerOne];
+  const opponentUuid = data.references[runnerTwo];
 
   return (
     <Card className="border rounded-xl shadow-lg p-8 mb-8">
@@ -72,13 +77,13 @@ export const ScoresPerSeasonDisplay = ({ data }: ScoresPerSeasonDisplayProps) =>
                       {`S${data.scoresPerSeason.length - index}: `}
                     </span>
                     <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
-                      {seasonScore[Object.entries(data.playerSkins)[0][0]]}
+                      {seasonScore[runnerUuid]}
                     </span>
                     <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
                       {" - "}
                     </span>
                     <span className="text-4xl font-extrabold text-gray-800 dark:text-gray-300 py-2 rounded-lg">
-                      {seasonScore[Object.entries(data.playerSkins)[1][0]]}
+                      {seasonScore[opponentUuid]}
                     </span>
                     <CollapsibleTrigger asChild>
                       <Button variant="ghost" size="icon" onClick={() => toggleOne(index)}>

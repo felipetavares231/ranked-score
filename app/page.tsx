@@ -16,10 +16,13 @@ import { winrate } from "./utils/getWinrate";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { ScoresPerSeasonDisplay } from "./components/ScoresPerSeasonDisplay";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { getMinecraftId } from "./utils/getMinecraftId";
 
 export default function Home() {
   const [runner, setRunner] = useState("");
   const [runner2, setRunner2] = useState("");
+
+  const [runnerUuid, setRunnerUuid] = useState("")
 
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["scores", runner, runner2],
@@ -28,6 +31,7 @@ export default function Home() {
       if (!res.ok) {
         throw new Error("failed to fetch")
       }
+
       return res.json()
     },
     enabled: false,
@@ -49,12 +53,12 @@ export default function Home() {
           </div>
           {data?.playerSkins && (
             <div>
-              <PlayerScoreDisplay data={data} />
+              <PlayerScoreDisplay data={data} runnerOne={runner} runnerTwo={runner2} />
             </div>
           )}
         </div>
         {data && data.scoresPerSeason && (
-          <ScoresPerSeasonDisplay data={data} />
+          <ScoresPerSeasonDisplay data={data} runnerOne={runner} runnerTwo={runner2} />
         )
         }
       </div>

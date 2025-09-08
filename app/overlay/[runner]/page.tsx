@@ -10,8 +10,12 @@ const OverlayPage = () => {
   const params = useParams();
   const runner = params?.runner as string;
 
+  const [runnerName, setRunnerName] = useState("");
+  const [opponentName, setOpponentName] = useState("");
+
   const [runnerUuid, setRunnerUuid] = useState("");
   const [opponentUuid, setOpponentUuid] = useState("");
+
   const [dataToShow, setDataToShow] = useState<any>(null);
 
   const { data: liveRankedResponse, refetch, isLoading } = useQuery({
@@ -29,7 +33,7 @@ const OverlayPage = () => {
   const { data: rankedScoresResponse, refetch: getRankedScores } = useQuery({
     queryKey: ["getRankedScores"],
     queryFn: async () => {
-      const res = await fetch(`/api/getScoresFromVersusScores/${runnerUuid}/${opponentUuid}`)
+      const res = await fetch(`/api/getScoresFromVersusScores/${runnerName}/${opponentName}`)
       if (!res.ok) {
         throw new Error("failed to fetch")
       }
@@ -39,31 +43,56 @@ const OverlayPage = () => {
   });
 
   useEffect(() => {
-    if (liveRankedResponse) {
-      let currentMatch = liveRankedResponse.data.liveMatches.find((match: any) => match.players[0]?.nickname == runner || match.players[1]?.nickname == runner)
-      let playerUuid = currentMatch?.players.find((player: any) => player["nickname"] == runner).uuid
-      let opponentUuid = Object.entries(currentMatch?.data ?? {}).find((player) => player[0] !== playerUuid)?.[0]
+    if (!liveRankedResponse) return;
 
-      setRunnerUuid(playerUuid)
-      if (opponentUuid) {
-        setOpponentUuid(opponentUuid)
+    const currentMatch = liveRankedResponse.data.liveMatches.find(
+      (match: any) => match.players[0]?.nickname === runner || match.players[1]?.nickname === runner
+    );
+
+    if (!currentMatch) return;
+
+    const player = currentMatch.players.find((p: any) => p.nickname === runner);
+    const playerUuid = player?.uuid;
+    const playerName = player?.nickname;
+    setRunnerName(playerName);
+
+    const opponentUuid = Object.entries(currentMatch?.data ?? {}).find(([uuid]) => uuid !== playerUuid)?.[0];
+    if (!opponentUuid) return;
+
+    setRunnerUuid(playerUuid);
+    setOpponentUuid(opponentUuid);
+
+    const fetchOpponentName = async () => {
+      try {
+        const res = await fetch(`/api/getMinecraftNameFromId/${opponentUuid}`);
+        const data = await res.json();
+        if (data.name) setOpponentName(data.name);
+      } catch (err) {
+        console.error("Failed to fetch opponent name:", err);
       }
-    }
-  }, [liveRankedResponse])
+    };
+
+    fetchOpponentName();
+  }, [liveRankedResponse]);
 
   useEffect(() => {
-    if (runnerUuid && opponentUuid) {
+    if (runnerName && opponentName) {
       getRankedScores()
     }
-  }, [runnerUuid, opponentUuid])
+  }, [runnerName, opponentName])
 
   useEffect(() => {
     if (rankedScoresResponse) {
       setDataToShow(
         {
-          scores: rankedScoresResponse.scores, playerSkins: {
-            [runnerUuid]: `https://mc-heads.net/head/${runnerUuid}`,
-            [opponentUuid]: `https://mc-heads.net/head/${opponentUuid}`,
+          references: {
+            [runnerName]: runnerUuid,
+            [opponentName]: opponentUuid,
+          },
+          scores: rankedScoresResponse.scores,
+          playerSkins: {
+            [runnerUuid]: `https://mc-heads.net/head/${runnerName}`,
+            [opponentUuid]: `https://mc-heads.net/head/${opponentName}`,
           }
         }
       )
@@ -77,7 +106,7 @@ const OverlayPage = () => {
     <div className="flex flex-1">
       {dataToShow && (
         <div className="flex flex-1">
-          <PlayerScoreDisplay overlay data={dataToShow} />
+          <PlayerScoreDisplay overlay data={dataToShow} runnerOne={runnerName} runnerTwo={opponentName} />
         </div>
       )}
       <div className="flex flex-1"></div>
