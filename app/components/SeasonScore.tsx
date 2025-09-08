@@ -11,7 +11,7 @@ export const SeasonScore = ({ match }: SeasonScoreProps) => {
 
   return (
     <Link
-      href={`https://mcsrranked.com/stats/${match.players[0].nickname}/vs/${match.players[1].nickname}/${match.id}`}
+      href={`https://mcsrranked.com/stats/${match.players[0].nickname}/vs/${match.players[1].nickname}/${match.id}?season=${match.season}`}
       target="_blank"
       key={match.id}
       className="grid grid-cols-3 gap-4 py-2 border-b text-center text-gray-800 dark:text-gray-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
