@@ -8,13 +8,15 @@ import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface PlayerInputProps {
+  runner: string;
+  runner2: string;
   setRunner: Dispatch<SetStateAction<string>>
   setRunner2: Dispatch<SetStateAction<string>>
   onClick: () => void
   isLoading?: boolean
 }
 
-export const PlayerInput = ({ setRunner, setRunner2, onClick, isLoading }: PlayerInputProps) => {
+export const PlayerInput = ({ setRunner, setRunner2, onClick, isLoading, runner, runner2 }: PlayerInputProps) => {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
@@ -45,9 +47,9 @@ export const PlayerInput = ({ setRunner, setRunner2, onClick, isLoading }: Playe
       <CardContent className="flex flex-col items-center space-y-6">
         <div className="flex flex-row items-center space-x-4 text-center">
           <span>Compare</span>
-          <Input placeholder="a player" className="w-36" onChange={(e) => setRunner(e.target.value)} />
+          <Input placeholder="a player" className="w-36" value={runner} onChange={(e) => setRunner(e.target.value)} />
           <span>to</span>
-          <Input placeholder="another player" className="w-36" onChange={(e) => setRunner2(e.target.value)} />
+          <Input placeholder="another player" className="w-36" value={runner2} onChange={(e) => setRunner2(e.target.value)} />
         </div>
         <Button className="px-8" onClick={onClick} disabled={isLoading}>
           Compare!

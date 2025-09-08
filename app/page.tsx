@@ -1,41 +1,45 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { sampleData } from "./sampleData";
-import { PlayerScoreDisplay } from "./components/PlayerScoreDisplay";
-import { PlayerInput } from "./components/PlayerInput";
-import { Collapsible, CollapsibleTrigger } from "@radix-ui/react-collapsible";
-import { ChevronDown } from "lucide-react";
-import { CollapsibleContent } from "@/components/ui/collapsible";
-import { formatTime } from "./utils/formatTime";
-import { winrate } from "./utils/getWinrate";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
-import { ScoresPerSeasonDisplay } from "./components/ScoresPerSeasonDisplay";
-import { ThemeToggle } from "./components/ThemeToggle";
-import { getMinecraftId } from "./utils/getMinecraftId";
+import { useState, useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
+import { ThemeToggle } from "./components/ThemeToggle"
+import { PlayerInput } from "./components/PlayerInput"
+import { PlayerScoreDisplay } from "./components/PlayerScoreDisplay"
+import { ScoresPerSeasonDisplay } from "./components/ScoresPerSeasonDisplay"
 
 export default function Home() {
-  const [runner, setRunner] = useState("");
-  const [runner2, setRunner2] = useState("");
+  const searchParams = useSearchParams()
 
-  const [runnerUuid, setRunnerUuid] = useState("")
+  const [runner, setRunner] = useState("")
+  const [runner2, setRunner2] = useState("")
+  const [initialFetchDone, setInitialFetchDone] = useState(false)
+
+  useEffect(() => {
+    const r1 = searchParams.get("runnerOne")
+    const r2 = searchParams.get("runnerTwo")
+
+    if (r1) setRunner(r1)
+    if (r2) setRunner2(r2)
+
+    if (r1 && r2) setInitialFetchDone(true)
+  }, [searchParams])
 
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["scores", runner, runner2],
     queryFn: async () => {
       const res = await fetch(`/api/getAllTimeStats/${runner}/${runner2}`)
-      if (!res.ok) {
-        throw new Error("failed to fetch")
-      }
-
+      if (!res.ok) throw new Error("failed to fetch")
       return res.json()
     },
     enabled: false,
-  });
+  })
+
+  useEffect(() => {
+    if (initialFetchDone) {
+      refetch()
+      setInitialFetchDone(false)
+    }
+  }, [initialFetchDone, refetch])
 
   const handleCompare = () => {
     refetch()
@@ -49,19 +53,23 @@ export default function Home() {
       <div className="h-screen flex justify-center flex-wrap">
         <div className="flex flex-col mr-16">
           <div className="mb-4">
-            <PlayerInput setRunner={setRunner} setRunner2={setRunner2} onClick={handleCompare} isLoading={isLoading} />
+            <PlayerInput
+              setRunner={setRunner}
+              setRunner2={setRunner2}
+              onClick={handleCompare}
+              isLoading={isLoading}
+              runner={runner}
+              runner2={runner2}
+            />
           </div>
           {data?.playerSkins && (
-            <div>
-              <PlayerScoreDisplay data={data} runnerOne={runner} runnerTwo={runner2} />
-            </div>
+            <PlayerScoreDisplay data={data} runnerOne={runner} runnerTwo={runner2} />
           )}
         </div>
-        {data && data.scoresPerSeason && (
+        {data?.scoresPerSeason && (
           <ScoresPerSeasonDisplay data={data} runnerOne={runner} runnerTwo={runner2} />
-        )
-        }
+        )}
       </div>
     </div>
-  );
+  )
 }
