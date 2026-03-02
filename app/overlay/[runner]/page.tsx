@@ -91,8 +91,8 @@ const OverlayPage = () => {
           },
           scores: rankedScoresResponse.scores,
           playerSkins: {
-            [runnerUuid]: `https://mc-heads.net/head/${runnerName}`,
-            [opponentUuid]: `https://mc-heads.net/head/${opponentName}`,
+            [runnerUuid]: `https://nmsr.nickac.dev/bust/${runnerName}`,
+            [opponentUuid]: `https://nmsr.nickac.dev/bust/${opponentName}`,
           }
         }
       )

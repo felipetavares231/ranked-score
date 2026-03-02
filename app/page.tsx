@@ -46,30 +46,30 @@ function HomeContent() {
   };
 
   return (
-    <div>
-      <div className="mt-2 ml-2">
+    <div className="min-h-screen flex flex-col items-center px-4 py-10">
+      <header className="w-full max-w-2xl flex items-center justify-between mb-10">
+        <h1 className="text-2xl tracking-widest uppercase font-bold">
+          Ranked Score
+        </h1>
         <ThemeToggle />
-      </div>
-      <div className="h-screen flex justify-center flex-wrap">
-        <div className="flex flex-col mr-16">
-          <div className="mb-4">
-            <PlayerInput
-              setRunner={setRunner}
-              setRunner2={setRunner2}
-              onClick={handleCompare}
-              isLoading={isLoading}
-              runner={runner}
-              runner2={runner2}
-            />
-          </div>
-          {data?.playerSkins && (
-            <PlayerScoreDisplay
-              data={data}
-              runnerOne={runner}
-              runnerTwo={runner2}
-            />
-          )}
-        </div>
+      </header>
+
+      <main className="w-full max-w-2xl flex flex-col gap-6">
+        <PlayerInput
+          setRunner={setRunner}
+          setRunner2={setRunner2}
+          onClick={handleCompare}
+          isLoading={isLoading}
+          runner={runner}
+          runner2={runner2}
+        />
+        {data?.playerSkins && (
+          <PlayerScoreDisplay
+            data={data}
+            runnerOne={runner}
+            runnerTwo={runner2}
+          />
+        )}
         {data?.scoresPerSeason && (
           <ScoresPerSeasonDisplay
             data={data}
@@ -77,14 +77,20 @@ function HomeContent() {
             runnerTwo={runner2}
           />
         )}
-      </div>
+      </main>
     </div>
   );
 }
 
 export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-lg tracking-wide">
+          Loading...
+        </div>
+      }
+    >
       <HomeContent />
     </Suspense>
   );

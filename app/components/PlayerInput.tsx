@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import { Swords } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface PlayerInputProps {
@@ -40,19 +39,33 @@ export const PlayerInput = ({ setRunner, setRunner2, onClick, isLoading, runner,
       }
     }
   }, [isLoading])
-  //TODO: move all of this progress bar logic into a separate component
 
   return (
-    <Card className="border rounded-xl shadow-lg p-8">
-      <CardContent className="flex flex-col items-center space-y-6">
-        <div className="flex flex-row items-center space-x-4 text-center">
-          <span>Compare</span>
-          <Input placeholder="a player" className="w-36" value={runner} onChange={(e) => setRunner(e.target.value)} />
-          <span>to</span>
-          <Input placeholder="another player" className="w-36" value={runner2} onChange={(e) => setRunner2(e.target.value)} />
+    <Card className="border rounded-xl">
+      <CardContent className="flex flex-col items-center gap-5 p-6">
+        <div className="flex items-center gap-3 flex-wrap justify-center">
+          <span className="text-sm text-muted-foreground">Compare</span>
+          <Input
+            placeholder="Player one"
+            className="w-40 text-center"
+            value={runner}
+            onChange={(e) => setRunner(e.target.value)}
+          />
+          <span className="text-sm text-muted-foreground">vs</span>
+          <Input
+            placeholder="Player two"
+            className="w-40 text-center"
+            value={runner2}
+            onChange={(e) => setRunner2(e.target.value)}
+          />
         </div>
-        <Button className="px-8" onClick={onClick} disabled={isLoading}>
-          Compare!
+        <Button
+          className="px-8 gap-2"
+          onClick={onClick}
+          disabled={isLoading || !runner || !runner2}
+        >
+          <Swords className="h-4 w-4" />
+          Compare
         </Button>
         {isLoading && (
           <Progress value={progress} className="w-full" />

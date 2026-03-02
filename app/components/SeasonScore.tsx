@@ -13,14 +13,13 @@ export const SeasonScore = ({ match }: SeasonScoreProps) => {
     <Link
       href={`https://mcsrranked.com/stats/${match.players[0].nickname}/vs/${match.players[1].nickname}/${match.id}?season=${match.season}`}
       target="_blank"
-      key={match.id}
-      className="grid grid-cols-3 gap-4 py-2 border-b text-center text-gray-800 dark:text-gray-400 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className="grid grid-cols-3 gap-4 px-3 py-2 rounded-md text-sm hover:bg-accent/50 transition-colors"
     >
-      <span className="font-semibold">{winner}</span>
-      <span className={`${eloChange && eloChange > 0 ? "text-green-600 dark:text-green-400" : "text-red-600"}`}>
+      <span>{winner}</span>
+      <span className={eloChange > 0 ? "text-emerald-500" : "text-red-500"}>
         {eloChange > 0 ? `+${eloChange}` : eloChange}
       </span>
-      <span>{formatTime(match.result.time)}</span>
+      <span className="text-muted-foreground">{formatTime(match.result.time)}</span>
     </Link>
   )
 }

@@ -1,12 +1,6 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import { winrate } from "../utils/getWinrate";
-import { useTheme } from "next-themes";
 
 interface PlayerScoreDisplayProps {
   data: any;
@@ -16,42 +10,53 @@ interface PlayerScoreDisplayProps {
 }
 
 export const PlayerScoreDisplay = ({ data, overlay = false, runnerOne, runnerTwo }: PlayerScoreDisplayProps) => {
-
   const runnerUuid = data.references[runnerOne];
   const opponentUuid = data.references[runnerTwo];
 
+  const runnerScore = data.scores[runnerUuid];
+  const opponentScore = data.scores[opponentUuid];
+
+  const runnerWins = runnerScore > opponentScore;
+  const opponentWins = opponentScore > runnerScore;
+
   return (
-    <Card className={`rounded-xl shadow-lg p-8 ${!overlay ? "border" : "bg-transparent border-none"}`}>
-      <CardContent className="flex flex-row items-center justify-around">
-        <div className="flex flex-col text-center">
+    <Card className={`rounded-xl ${!overlay ? "border" : "bg-transparent border-none"}`}>
+      <CardContent className="flex items-center justify-around p-8 gap-4">
+        <div className="flex flex-col items-center gap-2">
           <img
             src={data.playerSkins[runnerUuid] as string}
-            className="w-20 h-20"
+            className="h-28 w-auto drop-shadow-lg"
+            style={{ imageRendering: "pixelated" }}
+            alt={runnerOne}
           />
-          <span className="text-4xl font-extrabold text-gray-800 dark:text-white py-2 rounded-lg">
-            {data.scores[runnerUuid]}
+          <span className="text-sm text-muted-foreground">{runnerOne}</span>
+          <span className={`text-5xl tabular-nums ${runnerWins ? "text-emerald-500" : ""}`}>
+            {runnerScore}
           </span>
-          <span className="text-1xl font-extrabold text-gray-500 dark:text-gray-300 py-2 rounded-lg">
-            {winrate(data.scores[runnerUuid], data.scores[opponentUuid])}
+          <span className="text-xs text-muted-foreground">
+            {winrate(runnerScore, opponentScore)}
           </span>
         </div>
 
-        <div className="flex flex-col items-center text-gray-500 font-bold px-4">
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-500"></div>
-          <span className="my-2 dark:text-white">VS</span>
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-500"></div>
+        <div className="flex flex-col items-center gap-3 px-4">
+          <div className="w-px h-8 bg-border" />
+          <span className="text-lg text-muted-foreground tracking-widest">VS</span>
+          <div className="w-px h-8 bg-border" />
         </div>
 
-        <div className="flex flex-col text-center">
+        <div className="flex flex-col items-center gap-2">
           <img
             src={data.playerSkins[opponentUuid] as string}
-            className="w-20 h-20 scale-x-[-1]"
+            className="h-28 w-auto drop-shadow-lg scale-x-[-1]"
+            style={{ imageRendering: "pixelated" }}
+            alt={runnerTwo}
           />
-          <span className="text-4xl font-extrabold text-gray-800 dark:text-white py-2 rounded-lg">
-            {data.scores[opponentUuid]}
+          <span className="text-sm text-muted-foreground">{runnerTwo}</span>
+          <span className={`text-5xl tabular-nums ${opponentWins ? "text-emerald-500" : ""}`}>
+            {opponentScore}
           </span>
-          <span className="text-1xl font-extrabold text-gray-500 dark:text-gray-300 py-2 rounded-lg">
-            {winrate(data.scores[opponentUuid], data.scores[runnerUuid])}
+          <span className="text-xs text-muted-foreground">
+            {winrate(opponentScore, runnerScore)}
           </span>
         </div>
       </CardContent>
