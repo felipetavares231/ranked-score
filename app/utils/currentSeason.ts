@@ -1,0 +1,1 @@
+export currentSeason = 11;
